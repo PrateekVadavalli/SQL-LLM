@@ -2,6 +2,10 @@ import streamlit as st
 import mysql.connector
 import subprocess
 import pandas as pd
+import os
+from dotenv import load_dotenv
+load_dotenv()
+
 
 # Function to get DB Schema
 def get_db_schema():
@@ -106,13 +110,12 @@ def extract_sql_from_text(text_response):
 
 
 
-# Function to run SQL query
 def run_sql_query(query):
     conn = mysql.connector.connect(
-        host="localhost",
-        user="root",
-        password="Fiesta9*",
-        database="sakila"
+        host=os.getenv("DB_HOST"),
+        user=os.getenv("DB_USER"),
+        password=os.getenv("DB_PASSWORD"),
+        database=os.getenv("DB_NAME")
     )
     cursor = conn.cursor()
     cursor.execute(query)
@@ -124,6 +127,7 @@ def run_sql_query(query):
     conn.commit()
     conn.close()
     return results, columns
+
 
 
 
